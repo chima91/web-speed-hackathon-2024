@@ -1,39 +1,10 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useCallback } from 'react';
-import { styled } from 'styled-components';
 
 import { Link } from '../../../foundation/components/Link';
 import { Color, Radius, Space } from '../../../foundation/styles/variables';
 
 import { FavButton } from './FavButton';
-
-const _Wrapper = styled.div`
-  position: fixed;
-  bottom: ${Space * 4}px;
-  left: 50%;
-  transform: translateX(-50%);
-`;
-
-const _Content = styled.div`
-  display: flex;
-  gap: ${Space * 1}px;
-  justify-content: center;
-  min-width: 296px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  padding: ${Space * 1}px;
-  border-radius: calc(${Radius.X_LARGE} + ${Space * 1}px);
-  background-color: ${Color.MONO_A};
-`;
-
-const _ReadLink = styled(Link)`
-  display: block;
-  border-radius: ${Radius.X_LARGE};
-  background-color: ${Color.Primary};
-  padding: ${Space * 2}px ${Space * 8}px;
-  font-weight: bold;
-  color: ${Color.MONO_100};
-  flex-shrink: 0;
-`;
 
 type Props = {
   bookId: string;
@@ -53,13 +24,44 @@ export const BottomNavigator: React.FC<Props> = ({ bookId, isFavorite, latestEpi
   }, [onClickFav]);
 
   return (
-    <_Wrapper>
+    <div
+      style={{
+        bottom: `${Space * 4}px`,
+        left: '50%',
+        position: 'fixed',
+        transform: 'translateX(-50%)',
+      }}
+    >
       <animated.div style={props}>
-        <_Content>
+        <div
+          style={{
+            backgroundColor: `${Color.MONO_A}`,
+            borderRadius: `calc(${Radius.X_LARGE} + ${Space * 1}px)`,
+            boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            gap: `${Space * 1}px`,
+            justifyContent: 'center',
+            minWidth: '296px',
+            padding: `${Space * 1}px`,
+          }}
+        >
           <FavButton enabled={isFavorite} onClick={handleFavClick} />
-          <_ReadLink to={`/books/${bookId}/episodes/${latestEpisodeId}`}>最新話を読む</_ReadLink>
-        </_Content>
+          <Link
+            style={{
+              backgroundColor: Color.Primary,
+              borderRadius: Radius.X_LARGE,
+              color: Color.MONO_100,
+              display: 'block',
+              flexShrink: '0',
+              fontWeight: 'bold',
+              padding: `${Space * 2}px ${Space * 8}px`,
+            }}
+            to={`/books/${bookId}/episodes/${latestEpisodeId}`}
+          >
+            最新話を読む
+          </Link>
+        </div>
       </animated.div>
-    </_Wrapper>
+    </div>
   );
 };
