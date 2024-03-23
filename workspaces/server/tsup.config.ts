@@ -8,6 +8,8 @@ export default defineConfig(async (): Promise<Options[]> => {
   const PACKAGE_DIR = (await findPackageDir(process.cwd()))!;
   const OUTPUT_DIR = path.resolve(PACKAGE_DIR, './dist');
 
+  const isProduction = process.env['NODE_ENV'] === 'production';
+
   return [
     {
       clean: true,
@@ -20,16 +22,16 @@ export default defineConfig(async (): Promise<Options[]> => {
           : 'http://localhost:8000',
         NODE_ENV: process.env['NODE_ENV'] || 'development',
       },
-      format: 'cjs',
+      format: 'esm',
       metafile: true,
-      minify: false,
+      minify: isProduction,
       noExternal: [/@wsh-2024\/.*/],
       outDir: OUTPUT_DIR,
       shims: true,
-      sourcemap: true,
+      sourcemap: !isProduction,
       splitting: false,
-      target: 'node18',
-      treeshake: false,
+      target: 'node20',
+      treeshake: true,
     },
   ];
 });
