@@ -84,7 +84,9 @@ const TopPage: React.FC = () => {
 
 const TopPageWithSuspense: React.FC = () => {
   return (
-    <Suspense fallback={null}>
+    <Suspense
+      fallback={<div style={{ backgroundColor: '#666', height: '576px', marginLeft: '-16px', width: '1024px' }}></div>}
+    >
       <TopPage />
     </Suspense>
   );

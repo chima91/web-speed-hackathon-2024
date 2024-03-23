@@ -6,7 +6,7 @@ import { Link } from './foundation/components/Link';
 import { Text } from './foundation/components/Text';
 import { ActionLayout } from './foundation/layouts/ActionLayout';
 import { CommonLayout } from './foundation/layouts/CommonLayout';
-import { Color, Space, Typography } from './foundation/styles/variables';
+import { Color, Typography } from './foundation/styles/variables';
 import { AuthorDetailPage } from './pages/AuthorDetailPage';
 import { BookDetailPage } from './pages/BookDetailPage';
 import { EpisodeDetailPage } from './pages/EpisodeDetailPage';
@@ -30,7 +30,7 @@ export const Router: React.FC = () => {
                   backgroundColor: 'transparent',
                   border: 'none',
                   display: 'flex',
-                  gap: `${Space * 1}px`,
+                  gap: '8px',
                   justifyContent: 'center',
                 }}
               >
