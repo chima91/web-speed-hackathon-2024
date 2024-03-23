@@ -1,3 +1,5 @@
+'use strict';
+
 self.addEventListener('install', (event) => {
-  console.log({ event });
+  event.waitUntil(console.log('test'));
 });
