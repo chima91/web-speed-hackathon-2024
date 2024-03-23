@@ -1,3 +1,5 @@
+import { inject } from 'regexparam';
+
 import type { LoginRequestBody } from '@wsh-2024/schema/src/api/auth/LoginRequestBody';
 import type { LoginResponse } from '@wsh-2024/schema/src/api/auth/LoginResponse';
 import type { LogoutResponse } from '@wsh-2024/schema/src/api/auth/LogoutResponse';
@@ -14,18 +16,18 @@ type AuthApiClient = DomainSpecificApiClientInterface<{
 
 export const authApiClient: AuthApiClient = {
   fetchAuthUser: async () => {
-    const response = await apiClient.get('/api/v1/admin/me').json<UserResponse>();
+    const response = await apiClient.get(inject('api/v1/admin/me', {})).json<UserResponse>();
     return response;
   },
   fetchAuthUser$$key: () => [
     {
       method: 'get',
-      requestUrl: `/api/v1/admin/me`,
+      requestUrl: `/api/v1/admin/logout`,
     },
   ],
   login: async ({ body }) => {
     const response = await apiClient
-      .post('/api/v1/admin/login', {
+      .post(inject('api/v1/admin/login', {}), {
         json: body,
       })
       .json<LoginResponse>();
@@ -39,7 +41,7 @@ export const authApiClient: AuthApiClient = {
     options,
   ],
   logout: async () => {
-    const response = await apiClient.post('/api/v1/admin/logout').json<LogoutResponse>();
+    const response = await apiClient.post(inject('api/v1/admin/logout', {})).json<LogoutResponse>();
     return response;
   },
   logout$$key: () => [
