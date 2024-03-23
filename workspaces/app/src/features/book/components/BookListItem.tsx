@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { memo } from 'react';
 
 import { Box } from '../../../foundation/components/Box';
 import { Flex } from '../../../foundation/components/Flex';
@@ -11,40 +11,37 @@ import { useImage } from '../../../foundation/hooks/useImage';
 import { Color, Radius, Space, Typography } from '../../../foundation/styles/variables';
 import { useBook } from '../hooks/useBook';
 
-const _Wrapper = styled.li`
-  width: 100%;
-`;
-
-const _Link = styled(Link)`
-  width: 100%;
-`;
-
-const _ImgWrapper = styled.div`
-  width: 64px;
-  height: 64px;
-  > img {
-    border-radius: ${Radius.SMALL};
-  }
-`;
-
 type Props = {
   bookId: string;
 };
 
-export const BookListItem: React.FC<Props> = ({ bookId }) => {
+const BookListItemMemo: React.FC<Props> = memo(({ bookId }) => {
   const { data: book } = useBook({ params: { bookId } });
 
   const imageUrl = useImage({ height: 64, imageId: book.image.id, width: 64 });
 
   return (
-    <_Wrapper>
-      <_Link href={`/books/${book.id}`}>
+    <li style={{ width: '100%' }}>
+      <Link href={`/books/${book.id}`} style={{ width: '100%' }}>
         <Spacer height={Space * 1.5} />
         <Flex align="flex-start" gap={Space * 2.5} justify="flex-start">
           {imageUrl != null && (
-            <_ImgWrapper>
-              <Image alt={book.name} height={64} objectFit="cover" src={imageUrl} width={64} />
-            </_ImgWrapper>
+            <div
+              style={{
+                height: '64px',
+                width: '64px',
+              }}
+            >
+              <Image
+                alt={book.name}
+                height={64}
+                loading="lazy"
+                objectFit="cover"
+                src={imageUrl}
+                style={{ borderRadius: Radius.SMALL }}
+                width={64}
+              />
+            </div>
           )}
           <Box width="100%">
             <Flex align="flex-start" direction="column" gap={Space * 1} justify="flex-start">
@@ -59,7 +56,10 @@ export const BookListItem: React.FC<Props> = ({ bookId }) => {
         </Flex>
         <Spacer height={Space * 1.5} />
         <Separator />
-      </_Link>
-    </_Wrapper>
+      </Link>
+    </li>
   );
-};
+});
+
+BookListItemMemo.displayName = 'BookListItem';
+export { BookListItemMemo as BookListItem };
