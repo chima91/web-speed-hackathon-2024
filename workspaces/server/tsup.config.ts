@@ -22,7 +22,7 @@ export default defineConfig(async (): Promise<Options[]> => {
           : 'http://localhost:8000',
         NODE_ENV: process.env['NODE_ENV'] || 'development',
       },
-      format: 'esm',
+      format: 'cjs',
       metafile: true,
       minify: isProduction,
       noExternal: [/@wsh-2024\/.*/],

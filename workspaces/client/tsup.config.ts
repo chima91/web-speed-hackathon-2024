@@ -16,6 +16,8 @@ export default defineConfig(async (): Promise<Options[]> => {
   const SEED_IMAGE_DIR = path.resolve(WORKSPACE_DIR, './workspaces/server/seeds/images');
   const IMAGE_PATH_LIST = fs.readdirSync(SEED_IMAGE_DIR).map((file) => `/images/${file}`);
 
+  const isProduction = process.env['NODE_ENV'] === 'production';
+
   return [
     {
       bundle: true,
@@ -38,13 +40,8 @@ export default defineConfig(async (): Promise<Options[]> => {
       },
       esbuildPlugins: [
         polyfillNode({
-          globals: {
-            process: false,
-          },
           polyfills: {
             events: true,
-            fs: true,
-            path: true,
           },
         }),
       ],
@@ -54,11 +51,11 @@ export default defineConfig(async (): Promise<Options[]> => {
         '.wasm': 'binary',
       },
       metafile: true,
-      minify: false,
+      minify: isProduction,
       outDir: OUTPUT_DIR,
       platform: 'browser',
       shims: true,
-      sourcemap: 'inline',
+      sourcemap: isProduction ? false : 'inline',
       splitting: true,
       target: ['chrome123'],
       treeshake: true,
