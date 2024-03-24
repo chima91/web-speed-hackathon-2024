@@ -35,7 +35,6 @@ const BookListItemMemo: React.FC<Props> = memo(({ bookId }) => {
               <Image
                 alt={book.name}
                 height={64}
-                loading="lazy"
                 objectFit="cover"
                 src={imageUrl}
                 style={{ borderRadius: Radius.SMALL }}
