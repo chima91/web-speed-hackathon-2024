@@ -1,5 +1,7 @@
 import { memo } from 'react';
 
+import type { GetBookListResponse } from '@wsh-2024/schema/src/api/books/GetBookListResponse';
+
 import { Box } from '../../../foundation/components/Box';
 import { Flex } from '../../../foundation/components/Flex';
 import { Image } from '../../../foundation/components/Image';
@@ -9,15 +11,12 @@ import { Spacer } from '../../../foundation/components/Spacer';
 import { Text } from '../../../foundation/components/Text';
 import { useImage } from '../../../foundation/hooks/useImage';
 import { Color, Radius, Space, Typography } from '../../../foundation/styles/variables';
-import { useBook } from '../hooks/useBook';
 
 type Props = {
-  bookId: string;
+  book: Omit<GetBookListResponse[number], 'nameRuby' | 'author'>;
 };
 
-const BookListItemMemo: React.FC<Props> = memo(({ bookId }) => {
-  const { data: book } = useBook({ params: { bookId } });
-
+const BookListItemMemo: React.FC<Props> = memo(({ book }) => {
   const imageUrl = useImage({ height: 64, imageId: book.image.id, width: 64 });
 
   return (
