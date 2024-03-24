@@ -41,6 +41,7 @@ const AuthorDetailPage: React.FC = () => {
               key={author.id}
               alt={author.name}
               height={128}
+              loading="eager"
               objectFit="cover"
               src={imageUrl}
               style={{ borderRadius: '50%' }}
