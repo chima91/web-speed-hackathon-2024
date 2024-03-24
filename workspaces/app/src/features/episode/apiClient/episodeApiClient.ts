@@ -6,7 +6,6 @@ import type { GetEpisodeRequestParams } from '@wsh-2024/schema/src/api/episodes/
 import type { GetEpisodeResponse } from '@wsh-2024/schema/src/api/episodes/GetEpisodeResponse';
 
 import type { DomainSpecificApiClientInterface } from '../../../lib/api/DomainSpecificApiClientInterface';
-import { apiClient } from '../../../lib/api/apiClient';
 
 type EpisodeApiClient = DomainSpecificApiClientInterface<{
   fetch: [{ params: GetEpisodeRequestParams }, GetEpisodeResponse];
@@ -15,18 +14,28 @@ type EpisodeApiClient = DomainSpecificApiClientInterface<{
 
 export const episodeApiClient: EpisodeApiClient = {
   fetch: async ({ params }) => {
-    const response = await apiClient.get<GetEpisodeResponse>(inject('/api/v1/episodes/:episodeId', params));
-    return response.data;
+    const response = await fetch(inject('/api/v1/episodes/:episodeId', params), {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'GET',
+    }).then<GetEpisodeResponse>((res) => (res.ok ? res.json() : Promise.reject(new Error('Failed to fetch'))));
+    return response;
   },
   fetch$$key: (options) => ({
     requestUrl: `/api/v1/episodes/:episodeId`,
     ...options,
   }),
   fetchList: async ({ query }) => {
-    const response = await apiClient.get<GetEpisodeListResponse>(inject('/api/v1/episodes', {}), {
-      params: query,
-    });
-    return response.data;
+    const params = new URLSearchParams();
+    if (query.bookId) params.append('bookId', query.bookId.toString());
+    if (query.limit) params.append('limit', query.limit.toString());
+    if (query.offset) params.append('offset', query.offset.toString());
+    let url = `/api/v1/episodes`;
+    if (params.toString()) url += `?${params.toString()}`;
+    const response = await fetch(url, {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'GET',
+    }).then<GetEpisodeListResponse>((res) => (res.ok ? res.json() : Promise.reject(new Error('Failed to fetch'))));
+    return response;
   },
   fetchList$$key: (options) => ({
     requestUrl: `/api/v1/episodes`,
